@@ -90,7 +90,8 @@ public class AddressBook {
     private static final String MESSAGE_PERSONS_FOUND_OVERVIEW = "%1$d persons found!";
     private static final String MESSAGE_STORAGE_FILE_CREATED = "Created new empty storage file: %1$s";
     private static final String MESSAGE_WELCOME = "Welcome to your Address Book!";
-    private static final String MESSAGE_USING_DEFAULT_FILE = "Using default storage file : " + DEFAULT_STORAGE_FILEPATH;
+    private static final String MESSAGE_USING_DEFAULT_FILE = "Using default storage file : "
+            + DEFAULT_STORAGE_FILEPATH;
 
     // These are the prefix strings to define the data type of a command parameter
     private static final String PERSON_DATA_PREFIX_PHONE = "p/";
@@ -188,9 +189,9 @@ public class AddressBook {
     /**
      * Stores the most recent list of persons shown to the user as a result of a user command.
      * This is a subset of the full list. Deleting persons in the pull list does not delete
-     * those persons from this list.
+     * those persons from this list. Initial view is of all.
      */
-    private static ArrayList<HashMap<PersonProperty, String>> latestPersonListingView = getAllPersonsInAddressBook(); // initial view is of all
+    private static ArrayList<HashMap<PersonProperty, String>> latestPersonListingView = getAllPersonsInAddressBook();
 
     /**
      * The path to the file used for storing person data.
@@ -453,7 +454,8 @@ public class AddressBook {
      */
     private static String executeFindPersons(String commandArgs) {
         final Set<String> keywords = extractKeywordsFromFindPersonArgs(commandArgs);
-        final ArrayList<HashMap<PersonProperty, String>> personsFound = getPersonsWithNameContainingAnyKeyword(keywords);
+        final ArrayList<HashMap<PersonProperty, String>> personsFound =
+                getPersonsWithNameContainingAnyKeyword(keywords);
         showToUser(personsFound);
         return getMessageForPersonsDisplayedSummary(personsFound);
     }
@@ -464,7 +466,8 @@ public class AddressBook {
      * @param personsDisplayed used to generate summary
      * @return summary message for persons displayed
      */
-    private static String getMessageForPersonsDisplayedSummary(ArrayList<HashMap<PersonProperty, String>> personsDisplayed) {
+    private static String getMessageForPersonsDisplayedSummary(
+            ArrayList<HashMap<PersonProperty, String>> personsDisplayed) {
         return String.format(MESSAGE_PERSONS_FOUND_OVERVIEW, personsDisplayed.size());
     }
 
@@ -484,7 +487,8 @@ public class AddressBook {
      * @param keywords for searching
      * @return list of persons in full model with name containing some of the keywords
      */
-    private static ArrayList<HashMap<PersonProperty, String>> getPersonsWithNameContainingAnyKeyword(Collection<String> keywords) {
+    private static ArrayList<HashMap<PersonProperty, String>> getPersonsWithNameContainingAnyKeyword(
+            Collection<String> keywords) {
         final ArrayList<HashMap<PersonProperty, String>> matchedPersons = new ArrayList<>();
         for (HashMap<PersonProperty, String> person : getAllPersonsInAddressBook()) {
             final Set<String> wordsInName = new HashSet<>(splitByWhitespace(getNameFromPerson(person)));
@@ -659,8 +663,10 @@ public class AddressBook {
      * @param person to show
      * @return formatted listing message with index
      */
-    private static String getIndexedPersonListElementMessage(int visibleIndex, HashMap<PersonProperty, String> person) {
-        return String.format(MESSAGE_DISPLAY_LIST_ELEMENT_INDEX, visibleIndex) + getMessageForFormattedPersonData(person);
+    private static String getIndexedPersonListElementMessage(
+            int visibleIndex, HashMap<PersonProperty, String> person) {
+        return String.format(MESSAGE_DISPLAY_LIST_ELEMENT_INDEX, visibleIndex)
+                + getMessageForFormattedPersonData(person);
     }
 
     /**
@@ -731,7 +737,8 @@ public class AddressBook {
      * @return the list of decoded persons
      */
     private static ArrayList<HashMap<PersonProperty, String>> loadPersonsFromFile(String filePath) {
-        final Optional<ArrayList<HashMap<PersonProperty, String>>> successfullyDecoded = decodePersonsFromStrings(getLinesInFile(filePath));
+        final Optional<ArrayList<HashMap<PersonProperty, String>>> successfullyDecoded =
+                decodePersonsFromStrings(getLinesInFile(filePath));
         if (!successfullyDecoded.isPresent()) {
             showToUser(MESSAGE_INVALID_STORAGE_FILE_CONTENT);
             exitProgram();
@@ -792,7 +799,8 @@ public class AddressBook {
     /**
      * Deletes the specified person from the addressbook if it is inside. Saves any changes to storage file.
      *
-     * @param exactPerson the actual person inside the address book (exactPerson == the person to delete in the full list)
+     * @param exactPerson the actual person inside the address book (exactPerson == the person to delete in
+     *                    the full list)
      * @return true if the given person was found and deleted in the model
      */
     private static boolean deletePersonFromAddressBook(HashMap<PersonProperty, String> exactPerson) {
@@ -938,7 +946,8 @@ public class AddressBook {
      * @return if cannot decode any: empty Optional
      *         else: Optional containing decoded persons
      */
-    private static Optional<ArrayList<HashMap<PersonProperty, String>>> decodePersonsFromStrings(ArrayList<String> encodedPersons) {
+    private static Optional<ArrayList<HashMap<PersonProperty, String>>> decodePersonsFromStrings(
+            ArrayList<String> encodedPersons) {
         final ArrayList<HashMap<PersonProperty, String>> decodedPersons = new ArrayList<>();
         for (String encodedPerson : encodedPersons) {
             final Optional<HashMap<PersonProperty, String>> decodedPerson = decodePersonFromString(encodedPerson);
