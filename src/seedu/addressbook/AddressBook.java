@@ -447,7 +447,7 @@ public class AddressBook {
 
     /**
      * Finds and lists all persons in address book whose name contains any of the argument keywords.
-     * Keyword matching is case sensitive.
+     * Keyword matching is not case sensitive.
      *
      * @param commandArgs full command args string from the user
      * @return feedback display message for the operation result
@@ -489,10 +489,14 @@ public class AddressBook {
      */
     private static ArrayList<HashMap<PersonProperty, String>> getPersonsWithNameContainingAnyKeyword(
             Collection<String> keywords) {
+        ArrayList<String> keywordsForComparison = new ArrayList<>();
+        for (String keyword : keywords) {
+            keywordsForComparison.add(keyword.toLowerCase());
+        }
         final ArrayList<HashMap<PersonProperty, String>> matchedPersons = new ArrayList<>();
         for (HashMap<PersonProperty, String> person : getAllPersonsInAddressBook()) {
-            final Set<String> wordsInName = new HashSet<>(splitByWhitespace(getNameFromPerson(person)));
-            if (!Collections.disjoint(wordsInName, keywords)) {
+            final Set<String> wordsInName = new HashSet<>(splitByWhitespace(getNameFromPerson(person).toLowerCase()));
+            if (!Collections.disjoint(wordsInName, keywordsForComparison)) {
                 matchedPersons.add(person);
             }
         }
